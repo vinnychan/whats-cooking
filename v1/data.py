@@ -2,6 +2,30 @@ import torch
 import glob
 import unicodedata
 import string
+import json
+
+
+# read data from json file
+train_data = json.load(open('data/train.json'))
+cuisine = set()
+ingredients = {}
+for t_d in train_data:
+    #print(t_d);
+    cuisine_name = t_d['cuisine'];
+    cuisine_ingredients = t_d['ingredients'];
+    cuisine.add(cuisine_name);
+    if cuisine_name not in ingredients:
+        ingredients[cuisine_name] = set();
+
+    ingredients[cuisine_name].push(cuisine_ingredients);
+
+
+
+print(ingredients);
+print(cuisine);
+exit();
+
+
 
 all_letters = string.ascii_letters + " .,;'-"
 n_letters = len(all_letters)
