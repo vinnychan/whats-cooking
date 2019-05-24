@@ -23,8 +23,6 @@ for t_d in train_data:
 
 print(ingredients);
 print(cuisine);
-with open('data.txt', 'w') as outfile:
-    json.dump(ingredients, outfile)
 exit();
 
 
