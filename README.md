@@ -13,7 +13,10 @@ Steps we took:
 
 Run `python train.py` to train the network
 
-Run `python predict.py ['array', 'of', 'ingredients']`
+Run `python predict.py` with ingredient list to predict using our model
+
+Example:
+`python predict.py ["garbanzo beans", "garlic", "romaine lettuce", "black olives", "feta cheese crumbles", "grape tomatoes", "purple onion", "pepper", "seasoning"]`
 
 ![prediction](https://i.imgur.com/x0sIBiI.png)
 
