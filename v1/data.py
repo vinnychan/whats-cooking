@@ -3,6 +3,7 @@ import glob
 import unicodedata
 import string
 import json
+import pickle
 import random
 
 
@@ -18,13 +19,22 @@ def unicodeToAscii(s):
         and c in all_letters
     )
 
+def convertCuisineName(s):
+    if s == "southern_us":
+        return "southern"
+    elif s == "cajun_creole":
+        return "cajun"
+
+    return s
+
+
 for x in range(n_training_data):
     # read data from json file
     train_data = json.load(open('../resources/train.json'))
     cuisine = set()
     ingredients = {}
     for t_d in train_data:
-        cuisine_name = t_d['cuisine'];
+        cuisine_name = convertCuisineName(t_d['cuisine']);
         ingre_list = []
         for ingre in t_d['ingredients']:
             ingre_list.append(unicodeToAscii(ingre))
@@ -37,6 +47,10 @@ for x in range(n_training_data):
 
     with open('formatted_training_' + str(x) + '.json', 'w') as outfile:
         json.dump(ingredients, outfile)
+
+# pickle_out = open("categories.pickle", "wb")
+# pickle.dump(cuisine, pickle_out)
+# pickle_out.close()
 
 exit();
 

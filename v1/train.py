@@ -1,15 +1,52 @@
-import torch
-from data import *
+# import torch
+# from data import *
 from model import *
 import random
 import time
 import math
+import pickle
+import torch
+import glob
+import unicodedata
+import string
+import json
+from embedding import *
 
 n_hidden = 128
 n_epochs = 100000
 print_every = 5000
 plot_every = 1000
 learning_rate = 0.005 # If you set this too high, it might explode. If too low, it might not learn
+
+pickle_in = open("glove.pickle", "rb")
+glove_dict = pickle.load(pickle_in)
+
+pickle_in = open("categories.pickle", "rb")
+all_categories_set = pickle.load(pickle_in)
+all_categories = list(all_categories_set)
+train_data = json.load(open('../resources/formatted_data.json'))
+
+
+all_letters = string.ascii_letters + " .,;'-"
+n_letters = len(all_letters)
+n_categories = len(all_categories)
+
+# Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
+def unicodeToAscii(s):
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s)
+        if unicodedata.category(c) != 'Mn'
+        and c in all_letters
+    )
+
+
+
+# Turn a line into a <line_length x 1 x n_letters>,
+# or an array of one-hot letter vectors
+def lineToTensor(line):
+    tensor = torch.zeros(len(line), 1, n_letters)
+    return tensor
+
 
 def categoryFromOutput(output):
     top_n, top_i = output.data.topk(1) # Tensor out of Variable with .data
@@ -19,11 +56,21 @@ def categoryFromOutput(output):
 def randomChoice(l):
     return l[random.randint(0, len(l) - 1)]
 
+def normalizeTrainingData(trainingArray):
+    normalizedArray = []
+    for trainData in trainingArray:
+        dataSplit = trainData.split()
+        for data in dataSplit:
+            normalizedArray.append(data)
+
+    return normalizedArray
+
 def randomTrainingPair():
     category = randomChoice(all_categories)
-    line = randomChoice(category_lines[category])
-    category_tensor = Variable(torch.LongTensor([all_categories.index(category)]))
-    line_tensor = Variable(lineToTensor(line))
+    line = randomChoice(train_data[category])
+
+    category_tensor = Variable(torch.LongTensor(glove_dict[category]))
+    line_tensor = Variable(torch.LongTensor(get_glove_for_sentence(glove_dict, normalizeTrainingData(line))))
     return category, line, category_tensor, line_tensor
 
 rnn = RNN(n_letters, n_hidden, n_categories)
@@ -54,6 +101,7 @@ def timeSince(since):
     m = math.floor(s / 60)
     s -= m * 60
     return '%dm %ds' % (m, s)
+
 
 start = time.time()
 

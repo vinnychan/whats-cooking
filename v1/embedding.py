@@ -25,7 +25,7 @@ def get_glove_for_sentence(model, sentence):
     return glove_vector
 
 if __name__ == '__main__':
-    glove_model = load_glove_model('./glove.42B.300d.txt')
+    glove_model = load_glove_model('../resources/glove.42B.300d.txt')
     pickle_out = open("glove.pickle", "wb")
     pickle.dump(glove_model, pickle_out)
     pickle_out.close()
