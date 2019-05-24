@@ -28,30 +28,30 @@ def convertCuisineName(s):
     return s
 
 # read data from json file
-train_data = json.load(open('../resources/train.json'))
-cuisine = set()
-ingredients = {}
-for t_d in train_data:
-    cuisine_name = convertCuisineName(t_d['cuisine']);
-    ingre_list = []
-    for ingre in t_d['ingredients']:
-        ingre_list.append(unicodeToAscii(ingre))
-    cuisine.add(cuisine_name);
-    if cuisine_name not in ingredients:
-        ingredients[cuisine_name] = [];
+# train_data = json.load(open('../resources/train.json'))
+# cuisine = set()
+# ingredients = {}
+# for t_d in train_data:
+#     cuisine_name = convertCuisineName(t_d['cuisine']);
+#     ingre_list = []
+#     for ingre in t_d['ingredients']:
+#         ingre_list.append(unicodeToAscii(ingre))
+#     cuisine.add(cuisine_name);
+#     if cuisine_name not in ingredients:
+#         ingredients[cuisine_name] = [];
 
-    for x in range(n_training_data):
-        random.shuffle(ingre_list)
-        ingredients[cuisine_name].append(ingre_list);
+#     for x in range(n_training_data):
+#         random.shuffle(ingre_list)
+#         ingredients[cuisine_name].append(ingre_list);
 
-with open('formatted_training_all.json', 'w') as outfile:
-    json.dump(ingredients, outfile)
+# with open('formatted_training_all.json', 'w') as outfile:
+#     json.dump(ingredients, outfile)
 
 # pickle_out = open("categories.pickle", "wb")
 # pickle.dump(cuisine, pickle_out)
 # pickle_out.close()
 
-exit();
+#exit();
 
 
 
