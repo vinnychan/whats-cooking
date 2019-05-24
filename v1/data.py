@@ -9,7 +9,7 @@ import random
 
 all_letters = string.ascii_letters + " .,;'-"
 n_letters = len(all_letters)
-n_training_data = 2
+n_training_data = 10
 
 # Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
 def unicodeToAscii(s):
@@ -27,26 +27,25 @@ def convertCuisineName(s):
 
     return s
 
+# read data from json file
+train_data = json.load(open('../resources/train.json'))
+cuisine = set()
+ingredients = {}
+for t_d in train_data:
+    cuisine_name = convertCuisineName(t_d['cuisine']);
+    ingre_list = []
+    for ingre in t_d['ingredients']:
+        ingre_list.append(unicodeToAscii(ingre))
+    cuisine.add(cuisine_name);
+    if cuisine_name not in ingredients:
+        ingredients[cuisine_name] = [];
 
-for x in range(n_training_data):
-    # read data from json file
-    train_data = json.load(open('../resources/train.json'))
-    cuisine = set()
-    ingredients = {}
-    for t_d in train_data:
-        cuisine_name = convertCuisineName(t_d['cuisine']);
-        ingre_list = []
-        for ingre in t_d['ingredients']:
-            ingre_list.append(unicodeToAscii(ingre))
-        cuisine.add(cuisine_name);
-        if cuisine_name not in ingredients:
-            ingredients[cuisine_name] = [];
-
+    for x in range(n_training_data):
         random.shuffle(ingre_list)
         ingredients[cuisine_name].append(ingre_list);
 
-    with open('formatted_training_' + str(x) + '.json', 'w') as outfile:
-        json.dump(ingredients, outfile)
+with open('formatted_training_all.json', 'w') as outfile:
+    json.dump(ingredients, outfile)
 
 # pickle_out = open("categories.pickle", "wb")
 # pickle.dump(cuisine, pickle_out)
