@@ -6,7 +6,7 @@ import json
 
 
 # read data from json file
-train_data = json.load(open('data/train.json'))
+train_data = json.load(open('../resources/train.json'))
 cuisine = set()
 ingredients = {}
 for t_d in train_data:
@@ -15,14 +15,16 @@ for t_d in train_data:
     cuisine_ingredients = t_d['ingredients'];
     cuisine.add(cuisine_name);
     if cuisine_name not in ingredients:
-        ingredients[cuisine_name] = set();
+        ingredients[cuisine_name] = [];
 
-    ingredients[cuisine_name].push(cuisine_ingredients);
+    ingredients[cuisine_name].append(cuisine_ingredients);
 
 
 
 print(ingredients);
 print(cuisine);
+with open('data.txt', 'w') as outfile:
+    json.dump(ingredients, outfile)
 exit();
 
 
