@@ -12,7 +12,7 @@ import string
 import json
 from embedding import *
 
-n_hidden = 128
+n_hidden = 300
 n_epochs = 100000
 print_every = 5000
 plot_every = 1000
@@ -105,23 +105,49 @@ def timeSince(since):
 
 start = time.time()
 
+all_accuracy = []
+training_accuracy = 0
+
 for epoch in range(1, n_epochs + 1):
+
     category, line, category_tensor, line_tensor = randomTrainingPair()
     output, loss = train(category_tensor, line_tensor)
     current_loss += loss
 
-    # Print epoch number, loss, name and guess
-    if epoch % print_every == 0:
-        guess, guess_i = categoryFromOutput(output)
-        correct = '✓' if guess == category else '✗ (%s)' % category
-        print('%d %d%% (%s) %.4f %s / %s %s' % (epoch, epoch / n_epochs * 100, timeSince(start), loss, line, guess, correct))
+    guess, guess_i = categoryFromOutput(output)
+    if guess == category:
+        training_accuracy = training_accuracy + 1
+
+        # Print epoch number, loss, name and guess
+        if epoch % print_every == 0:
+            correct = '✓' if guess == category else '✗ (%s)' % category
+            print('%d %d%% (%s) %.4f %s / %s %s' % (
+            epoch, epoch / n_epochs * 100, timeSince(start), loss, line, guess, correct))
 
     # Add current loss avg to list of losses
     if epoch % plot_every == 0:
         all_losses.append(current_loss / plot_every)
+        all_accuracy.append(training_accuracy / plot_every)
         current_loss = 0
+        training_accuracy = 0
 
-torch.save(rnn, 'char-rnn-classification.pt')
+
+
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+plt.figure()
+plt.plot(all_losses)
+plt.xlabel("number of iteration (1000)")
+plt.ylabel("training loss")
+
+
+plt.figure()
+plt.plot(all_accuracy)
+plt.xlabel("number of iteration (1000)")
+plt.ylabel("training accuracy")
+
+plt.show()
 
 # Keep track of correct guesses in a confusion matrix
 confusion = torch.zeros(n_categories, n_categories)
@@ -148,3 +174,25 @@ for i in range(n_confusion):
 
 print('accuracy:')
 print(count_correct / n_confusion)
+
+# Normalize by dividing every row by its sum
+for i in range(n_categories):
+    confusion[i] = confusion[i] / confusion[i].sum()
+
+# Set up plot
+fig = plt.figure()
+ax = fig.add_subplot(111)
+cax = ax.matshow(confusion.numpy())
+fig.colorbar(cax)
+
+# Set up axes
+ax.set_xticklabels([''] + all_categories, rotation=90)
+ax.set_yticklabels([''] + all_categories)
+
+# Force label at every tick
+ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+
+# sphinx_gallery_thumbnail_number = 2
+plt.show()
+
