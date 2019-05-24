@@ -13,7 +13,7 @@ Steps we took:
 
 Run `python train.py` to train the network
 
-Run `python predicy.py ['array', 'of', 'ingredients']`
+Run `python predict.py ['array', 'of', 'ingredients']`
 
 ![prediction](https://i.imgur.com/x0sIBiI.png)
 
