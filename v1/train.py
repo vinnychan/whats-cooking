@@ -13,7 +13,7 @@ import json
 from embedding import *
 
 n_hidden = 300
-n_epochs = 100000
+n_epochs = 300000
 print_every = 5000
 plot_every = 1000
 learning_rate = 0.001 # If you set this too high, it might explode. If too low, it might not learn
@@ -24,7 +24,7 @@ glove_dict = pickle.load(pickle_in)
 pickle_in = open("categories.pickle", "rb")
 all_categories_set = pickle.load(pickle_in)
 all_categories = list(all_categories_set)
-train_data = json.load(open('../resources/formatted_data.json'))
+train_data = json.load(open('../resources/formatted_training_all.json'))
 
 
 all_letters = string.ascii_letters + " .,;'-"

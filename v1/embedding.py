@@ -3,7 +3,7 @@ import numpy as np
 
 def load_glove_model(gloveFile):
     print("Loading Glove Model")
-    f = open(gloveFile,'r', errors='replace')
+    f = open(gloveFile,'r', encoding="utf8")
     model = {}
     for line in f:
         splitLine = line.split()
