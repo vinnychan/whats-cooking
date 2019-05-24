@@ -63,7 +63,7 @@ def findFiles(path): return glob.glob(path)
 
 print(findFiles('data/names/*.txt'))
 
-train_data = json.load(open('resources/formatted_training.json'))
+# train_data = json.load(open('resources/formatted_training.json'))
 
 import unicodedata
 import string

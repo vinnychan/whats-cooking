@@ -61,7 +61,7 @@ def normalizeTrainingData(trainingArray):
     for trainData in trainingArray:
         dataSplit = trainData.split()
         for data in dataSplit:
-            normalizedArray.append(data)
+            normalizedArray.append(data.strip())
 
     return normalizedArray
 
@@ -69,8 +69,8 @@ def randomTrainingPair():
     category = randomChoice(all_categories)
     line = randomChoice(train_data[category])
 
-    category_tensor = Variable(torch.LongTensor(glove_dict[category]))
-    line_tensor = Variable(torch.LongTensor(get_glove_for_sentence(glove_dict, normalizeTrainingData(line))))
+    category_tensor = torch.tensor([all_categories.index(category)], dtype=torch.long)
+    line_tensor = Variable(torch.FloatTensor(get_glove_for_sentence(glove_dict, normalizeTrainingData(line))))
     return category, line, category_tensor, line_tensor
 
 rnn = RNN(n_letters, n_hidden, n_categories)

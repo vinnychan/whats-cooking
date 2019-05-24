@@ -8,8 +8,8 @@ class RNN(nn.Module):
 
         self.hidden_size = hidden_size
 
-        self.i2h = nn.Linear(input_size + hidden_size, hidden_size)
-        self.i2o = nn.Linear(input_size + hidden_size, output_size)
+        self.i2h = nn.Linear(300 + hidden_size, hidden_size)
+        self.i2o = nn.Linear(300 + hidden_size, output_size)
         self.softmax = nn.LogSoftmax()
 
     def forward(self, input, hidden):

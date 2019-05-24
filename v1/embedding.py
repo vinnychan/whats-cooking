@@ -18,9 +18,9 @@ def get_glove_for_sentence(model, sentence):
     for word in sentence:
         word = word.lower()
         if word in model.keys():
-            glove_vector.append(model[word.lower()])
+            glove_vector.append(model[word.lower()].reshape(1, 300))
         else:  # for unknown words, just give all-zero vectors
-            glove_vector.append(np.zeros([300,]))
+            glove_vector.append(np.zeros((1,300)))
     glove_vector = np.stack(glove_vector, axis=0)
     return glove_vector
 
