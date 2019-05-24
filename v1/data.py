@@ -5,32 +5,8 @@ import string
 import json
 
 
-# read data from json file
-train_data = json.load(open('../resources/train.json'))
-cuisine = set()
-ingredients = {}
-for t_d in train_data:
-    #print(t_d);
-    cuisine_name = t_d['cuisine'];
-    cuisine_ingredients = t_d['ingredients'];
-    cuisine.add(cuisine_name);
-    if cuisine_name not in ingredients:
-        ingredients[cuisine_name] = [];
-
-    ingredients[cuisine_name].append(cuisine_ingredients);
-
-
-
-print(ingredients);
-print(cuisine);
-exit();
-
-
-
 all_letters = string.ascii_letters + " .,;'-"
 n_letters = len(all_letters)
-
-def findFiles(path): return glob.glob(path)
 
 # Turn a Unicode string to plain ASCII, thanks to http://stackoverflow.com/a/518232/2809427
 def unicodeToAscii(s):
@@ -39,6 +15,31 @@ def unicodeToAscii(s):
         if unicodedata.category(c) != 'Mn'
         and c in all_letters
     )
+
+# read data from json file
+train_data = json.load(open('../resources/train.json'))
+cuisine = set()
+ingredients = {}
+for t_d in train_data:
+    cuisine_name = t_d['cuisine'];
+    ingre_list = []
+    for ingre in t_d['ingredients']:
+        ingre_list.append(unicodeToAscii(ingre))
+    cuisine.add(cuisine_name);
+    if cuisine_name not in ingredients:
+        ingredients[cuisine_name] = [];
+
+    ingredients[cuisine_name].append(ingre_list);
+
+
+exit();
+
+
+
+
+
+def findFiles(path): return glob.glob(path)
+
 
 # Read a file and split into lines
 def readLines(filename):
