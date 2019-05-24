@@ -4,3 +4,4 @@ venv/
 v1/.DS_Store
 v1/__pycache__
 v1/char-rnn-classification.pt
+*glove*
